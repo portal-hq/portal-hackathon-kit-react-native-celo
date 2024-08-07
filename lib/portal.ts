@@ -1,5 +1,6 @@
 import Portal, { PortalCurve, PortalSharePairStatus } from '@portal-hq/core'
 import { PasswordStorage } from '@portal-hq/utils/src/definitions'
+import Chain from './chains'
 
 export interface AssetsResponse {
   nativeBalance: {
@@ -43,9 +44,9 @@ export const createPortalInstance = (token: string): Portal => {
       },
       gatewayConfig: {
         'solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp':
-          'https://api.portalhq.io/rpc/v1/solana/5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp', // Solana Mainnet
+          'https://solana-mainnet.g.alchemy.com/v2/ExD4AhsURGGgGXK7455Pekt-FkCwSKEn', // Solana Mainnet
         'solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1':
-          'https://api.portalhq.io/rpc/v1/solana/EtWTRABZaYq6iMfeYKouRu166VU2xqa1', // Solana Devnet
+          'https://solana-devnet.g.alchemy.com/v2/ExD4AhsURGGgGXK7455Pekt-FkCwSKEn', // Solana Devnet
       },
     })
   }
@@ -132,4 +133,69 @@ export const isWalletBackedUp = async (): Promise<boolean> => {
 
 export const isWalletOnDevice = async (): Promise<boolean> => {
   return true
+}
+
+interface BuildTransactionResponse {
+  transaction: {
+    from: string
+    to: string
+    data: string
+  }
+  metadata: {
+    amount: string
+    fromAddress: string
+    toAddress: string
+    tokenAddress: string
+    tokenDecimals: number
+    rawAmount: string
+  }
+}
+
+/**
+ * Transfers PyUSD to another address
+ * @param address
+ * @param amount
+ * @param recipient
+ * @returns Promise<string> The transaction ID
+ */
+export const transferToken = async (
+  chainId: string,
+  recipient: string,
+  token: string,
+  amount: number,
+): Promise<string> => {
+  try {
+    const isDevnet = chainId === Chain.Devnet
+
+    const url = `https://api.portalhq.io/api/v3/clients/me/chains/solana${
+      isDevnet ? '-devnet' : ''
+    }/assets/send/build-transaction`
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${portal.apiKey}`,
+      },
+      body: JSON.stringify({
+        amount: amount.toString(),
+        to: recipient,
+        token,
+      }),
+    })
+
+    const transactionResponse =
+      (await response.json()) as BuildTransactionResponse
+
+    const transactionHash = await portal.request(
+      'sol_signAndSendTransaction',
+      [transactionResponse.transaction],
+      chainId,
+    )
+
+    return transactionHash
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
 }

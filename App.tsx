@@ -21,9 +21,7 @@ function App(): JSX.Element {
 
   useEffect(() => {
     if (!portal) {
-      const portal = createPortalInstance(
-        '52172a42-e31a-405f-aebc-23d9fa510e1f',
-      )
+      const portal = createPortalInstance('YOUR_PORTAL_CLIENT_API_KEY')
       setPortal(portal)
     } else {
       ;(async () => {

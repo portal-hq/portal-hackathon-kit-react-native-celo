@@ -2,8 +2,8 @@ import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import { Button, Text, TextInput, View } from 'react-native'
 import { styles } from '../../style/stylesheet'
 import Chain from '../../lib/chains'
-import { usePortal } from '@portal-hq/core'
-import { AssetsResponse, getAssetBalances } from '../../lib/portal'
+import { getAssetBalances, transferToken } from '../../lib/portal'
+import Screen from '../../lib/screens'
 
 interface WalletComponentProps {
   address: string
@@ -16,20 +16,26 @@ const WalletComponent: FC<WalletComponentProps> = ({
   chain,
   setScreen,
 }) => {
-  const portal = usePortal()
-
-  const [fetchingBalance, setFetchingBalance] = useState<boolean>(false)
   const [pyusdBalance, setPyusdBalance] = useState<number>()
   const [sendAddress, setSendAddress] = useState<string>()
   const [sendAmount, setSendAmount] = useState<number>()
   const [solBalance, setSolBalance] = useState<number>()
+  const [transactionHash, setTransactionHash] = useState<string>()
 
-  const sendPyusd = async () => {}
+  const sendPyusd = async () => {
+    if (sendAddress && sendAmount) {
+      const transactionHash = await transferToken(
+        chain,
+        sendAddress,
+        'PYUSD',
+        sendAmount,
+      )
+
+      setTransactionHash(transactionHash)
+    }
+  }
 
   const updateBalances = async () => {
-    setFetchingBalance(true)
-    console.log(`Getting balance for chain ${chain} and address ${address}`)
-
     const balances = await getAssetBalances(address, chain === Chain.Devnet)
 
     // Get SOL balance
@@ -41,12 +47,8 @@ const WalletComponent: FC<WalletComponentProps> = ({
     )
     const pyusdBalance = parseFloat(pyusd ? pyusd.balance : '0')
 
-    console.log(`SOL Balance: ${solBalance}`)
-    console.log(`PyUSD Balance: ${pyusdBalance}`)
-
     setSolBalance(solBalance)
     setPyusdBalance(pyusdBalance)
-    setFetchingBalance(false)
   }
 
   useEffect(() => {
@@ -96,6 +98,13 @@ const WalletComponent: FC<WalletComponentProps> = ({
         </View>
         <Button title="Send PyUSD" onPress={sendPyusd} />
       </View>
+
+      {typeof transactionHash !== 'undefined' && transactionHash.length > 0 && (
+        <View style={[{ marginTop: 10 }]}>
+          <Text style={styles.formLabel}>Transaction Hash</Text>
+          <Text>{transactionHash}</Text>
+        </View>
+      )}
     </View>
   )
 }
