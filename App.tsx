@@ -1,118 +1,77 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, { useEffect, useState } from 'react'
+import { StatusBar, View } from 'react-native'
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+  SafeAreaInsetsContext,
+  SafeAreaProvider,
+} from 'react-native-safe-area-context'
+import { styles } from './style/stylesheet'
+import Portal, { PortalContextProvider } from '@portal-hq/core'
+import Screen from './lib/screens'
+import Home from './screens/Home'
+import Chain from './lib/chains'
+import ChainPickerComponent from './components/shared/chain-picker'
+import { createPortalInstance } from './lib/portal'
+import Wallet from './screens/Wallet'
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+function App(): JSX.Element {
+  const [address, setAddress] = useState<string>('')
+  const [chain, setChain] = useState<Chain>(Chain.Devnet)
+  const [portal, setPortal] = useState<Portal | null>(null)
+  const [screen, setScreen] = useState<Screen>(Screen.Home)
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+  useEffect(() => {
+    if (!portal) {
+      const portal = createPortalInstance(
+        '52172a42-e31a-405f-aebc-23d9fa510e1f',
+      )
+      setPortal(portal)
+    } else {
+      ;(async () => {
+        const addresses = await portal.addresses
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+        if (addresses?.solana) {
+          setAddress(addresses.solana)
+        }
+      })()
+    }
+  }, [portal])
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
+    <SafeAreaProvider>
+      <PortalContextProvider value={portal as Portal}>
+        <SafeAreaInsetsContext.Consumer>
+          {(insets) => (
+            <View
+              style={[
+                styles.container,
+                styles.safeArea,
+                {
+                  paddingTop: insets ? insets.top : 0,
+                },
+              ]}
+            >
+              <StatusBar barStyle="dark-content" />
+              {chain && (
+                <ChainPickerComponent chain={chain} setChain={setChain} />
+              )}
+              <View style={styles.container}>
+                {screen === Screen.Home && (
+                  <Home setAddress={setAddress} setScreen={setScreen} />
+                )}
+                {screen === Screen.Wallet && (
+                  <Wallet
+                    address={address}
+                    chain={chain}
+                    setScreen={setScreen}
+                  />
+                )}
+              </View>
+            </View>
+          )}
+        </SafeAreaInsetsContext.Consumer>
+      </PortalContextProvider>
+    </SafeAreaProvider>
+  )
 }
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
-export default App;
+export default App
