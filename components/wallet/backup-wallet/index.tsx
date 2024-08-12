@@ -8,22 +8,48 @@ import { BackupMethods, usePortal } from '@portal-hq/core'
 const BackupWallet: FC = () => {
   const portal = usePortal()
 
+  const [backupDone, setBackupDone] = useState<boolean>(false)
+  const [isBackingUp, setIsBackingUp] = useState<boolean>(false)
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false)
   const [pin, setPin] = useState<string>('')
 
   const backupWallet = async () => {
-    await portal?.backupWallet(BackupMethods.Password, () => {}, {
-      passwordStorage: {
-        password: pin,
-      },
-    })
+    console.log(`Pin: ${pin}`)
+    if (pin && pin.length === 4) {
+      setIsBackingUp(true)
+      setIsModalVisible(false)
+      await portal?.backupWallet(BackupMethods.Password, () => {}, {
+        passwordStorage: {
+          password: pin,
+        },
+      })
+      setBackupDone(true)
+      setIsBackingUp(false)
+
+      setTimeout(() => {
+        setBackupDone(false)
+      }, 2500)
+    }
   }
 
   return (
     <>
       <View style={styles.section}>
         <PortalButton
-          title="Recover Wallet"
+          style={{
+            backgroundColor: backupDone
+              ? 'green'
+              : isBackingUp
+              ? 'gray'
+              : 'black',
+          }}
+          title={
+            backupDone
+              ? 'Done'
+              : isBackingUp
+              ? 'In Progress...'
+              : 'Backup Wallet'
+          }
           onPress={() => {
             setIsModalVisible(true)
           }}
@@ -32,6 +58,7 @@ const BackupWallet: FC = () => {
 
       {isModalVisible ? (
         <PinModal
+          label="Backup"
           onSubmit={backupWallet}
           pinLength={4}
           setPin={setPin}

@@ -34,7 +34,6 @@ const CreateWalletComponent: FC<CreateWalletComponentProps> = ({
     if (portal) {
       ;(async () => {
         const walletExists = await doesWalletExist()
-
         if (walletExists) {
           setScreen(Screen.Wallet)
         }

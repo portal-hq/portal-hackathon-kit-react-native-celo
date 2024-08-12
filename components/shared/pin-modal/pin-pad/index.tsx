@@ -6,10 +6,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import Ionicons from 'react-native-vector-icons/Ionicons'
 import { styles } from '../../../../style/stylesheet'
+import PortalButton from '../../button'
 
 interface PinPadProps {
+  label: string
+  onSubmit: () => void | Promise<void>
   pinLength: number
   setPin: Dispatch<SetStateAction<string>>
 }
@@ -19,7 +21,7 @@ const { width } = Dimensions.get('window')
 const keySize = width / 5 // Make sure to use the correct width
 const keyTextSize = keySize / 2.5
 
-const PinPad: FC<PinPadProps> = ({ pinLength, setPin }) => {
+const PinPad: FC<PinPadProps> = ({ label, onSubmit, pinLength, setPin }) => {
   const [code, setCode] = useState<string[]>([])
 
   const handlePress = (item: string) => {
@@ -82,11 +84,9 @@ const PinPad: FC<PinPadProps> = ({ pinLength, setPin }) => {
               }}
             >
               {item.item === 'del' ? (
-                <Ionicons
-                  name="backspace-outline"
-                  color={'black'}
-                  size={keyTextSize}
-                />
+                <Text style={{ color: 'black', fontSize: keyTextSize }}>
+                  {'<'}
+                </Text>
               ) : (
                 <Text
                   style={{
@@ -103,6 +103,12 @@ const PinPad: FC<PinPadProps> = ({ pinLength, setPin }) => {
         scrollEnabled={false}
         style={{ backgroundColor: 'white', flexGrow: 0 }}
       />
+
+      {typeof code !== 'undefined' && code.length === pinLength ? (
+        <View style={styles.section}>
+          <PortalButton title={label} onPress={onSubmit} />
+        </View>
+      ) : null}
     </View>
   )
 }

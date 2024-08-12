@@ -22,11 +22,6 @@ Portal SDK also covers the following backup method which were not covered in thi
 4. Update the **PORTAL_CLIENT_API_KEY** in `App.tsx` with your Portal Client API Key (screenshot below).
 5. Run the app and it should work without any issues.
 
-Note: It would be better to use the Simulator over using Real Device, don't test on Real iPhone device while the Xcode debugger is attached.
-
-![Portal Settings](demos/portal-settings-page.png)
-![Portal Constants File](demos/portal-constants-file.png)
-
 ## Understanding the Example App
 
 This app is made up of two main screens: Home and Wallet. The Home screen is where you can generate a new wallet or recover a backed up wallet, and the Wallet screen is where you can view your wallet details and perform transactions and backup.

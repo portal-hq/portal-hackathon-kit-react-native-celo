@@ -1,21 +1,28 @@
 import { Dispatch, FC, SetStateAction } from 'react'
-import { Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 import { styles } from '../../../style/stylesheet'
 import PinPad from './pin-pad'
-import Icon from 'react-native-vector-icons/Ionicons'
 
 interface PinModalProps {
+  label: string
   onSubmit: () => void | Promise<void>
   pinLength: number
   setPin: Dispatch<SetStateAction<string>>
   setVisible: Dispatch<SetStateAction<boolean>>
 }
 
-const PinModal: FC<PinModalProps> = ({ pinLength, setPin, setVisible }) => {
+const PinModal: FC<PinModalProps> = ({
+  label,
+  onSubmit,
+  pinLength,
+  setPin,
+  setVisible,
+}) => {
   return (
     <View style={styles.modalContainer}>
       <View style={styles.container}>
-        <View
+        <Pressable
+          onPress={() => setVisible(false)}
           style={[
             styles.section,
             {
@@ -31,17 +38,14 @@ const PinModal: FC<PinModalProps> = ({ pinLength, setPin, setVisible }) => {
             },
           ]}
         >
-          <Icon
-            color="black"
-            name="close-outline"
-            onPress={() => setVisible(false)}
-            size={40}
-            style={{
-              marginLeft: 'auto',
-            }}
-          />
-        </View>
-        <PinPad pinLength={pinLength} setPin={setPin} />
+          <Text style={{ fontSize: 24 }}>x</Text>
+        </Pressable>
+        <PinPad
+          label={label}
+          onSubmit={onSubmit}
+          pinLength={pinLength}
+          setPin={setPin}
+        />
       </View>
     </View>
   )

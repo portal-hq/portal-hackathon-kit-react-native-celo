@@ -20,9 +20,19 @@ const RecoverWalletComponent: FC<RecoverWalletComponentProps> = ({
   const portal = usePortal()
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false)
+  const [isRecovering, setIsRecovering] = useState<boolean>(false)
   const [pin, setPin] = useState<string>('')
+  const [recoveryDone, setRecoveryDone] = useState<boolean>(false)
 
   const recoverWallet = async () => {
+    console.log(`Pin: ${pin}`)
+
+    if (!pin || pin.length !== 4) {
+      return
+    }
+
+    setIsRecovering(true)
+    setIsModalVisible(false)
     const addresses = await portal?.recoverWallet(
       '',
       BackupMethods.Password,
@@ -33,6 +43,17 @@ const RecoverWalletComponent: FC<RecoverWalletComponentProps> = ({
         },
       },
     )
+
+    if (addresses?.solana) {
+      setAddress(addresses.solana)
+      setScreen(Screen.Wallet)
+      setRecoveryDone(true)
+      setIsRecovering(false)
+
+      setTimeout(() => {
+        setRecoveryDone(false)
+      }, 2500)
+    }
   }
 
   useEffect(() => {
@@ -52,6 +73,7 @@ const RecoverWalletComponent: FC<RecoverWalletComponentProps> = ({
 
       {isModalVisible ? (
         <PinModal
+          label="Recover"
           onSubmit={recoverWallet}
           pinLength={4}
           setPin={setPin}

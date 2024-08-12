@@ -28,6 +28,7 @@ function App(): JSX.Element {
         const addresses = await portal.addresses
 
         if (addresses?.solana) {
+          console.log(`Solana address: ${addresses.solana}`)
           setAddress(addresses.solana)
         }
       })()
