@@ -20,12 +20,28 @@ export const styles = StyleSheet.create({
     marginBottom: 5,
     textTransform: 'uppercase',
   },
+  modalContainer: {
+    alignItems: 'center',
+    backgroundColor: 'white',
+    flex: 1,
+    height: '100%',
+    justifyContent: 'center',
+    left: 0,
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    zIndex: 100,
+  },
   safeArea: {
     paddingHorizontal: 20,
   },
   screenTitle: {
     fontSize: 24,
     fontWeight: 'bold',
+  },
+  section: {
+    marginTop: 10,
+    width: '100%',
   },
   textInput: {
     borderColor: 'black',

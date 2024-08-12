@@ -21,7 +21,7 @@ function App(): JSX.Element {
 
   useEffect(() => {
     if (!portal) {
-      const portal = createPortalInstance('YOUR_PORTAL_CLIENT_API_KEY')
+      const portal = createPortalInstance('PORTAL_CLIENT_API_KEY')
       setPortal(portal)
     } else {
       ;(async () => {

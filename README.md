@@ -1,79 +1,91 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Portal Hackathon React Native Helper Repository
 
-# Getting Started
+This repository shows you how you can easily integrate Solana blockchain into your iOS app using the [Portal iOS SDK](https://docs.portalhq.io/guides/ios). It covers the following features.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+1. Generate a Solana Wallet
+2. Fetch and display Solana and PyUSD balances.
+3. Transfer PyUSD to a given Solana address.
+4. Backup the wallet with password as the key to Portal servers.
+5. Recover the wallet with password as the key from Portal servers.
 
-## Step 1: Start the Metro Server
+Portal SDK also covers the following backup method which were not covered in this example app but you learn how to implement them through our [docs](https://docs.portalhq.io/guides/react-native/back-up-a-wallet).
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+1. Backup with iCloud
+2. Backup with GDrive
+3. Backup with Passkey
 
-To start Metro, run the following command from the _root_ of your React Native project:
+## How to Run This Example App
 
-```bash
-# using npm
-npm start
+1. Clone the repo to your local system
+2. Open the project in your editor of choice.
+3. Go to your Portal Dashboard [settings page](https://app.portalhq.io/settings#client-api-keys) and create a client test API key (screenshots are attached below for your convenience).
+4. Update the **PORTAL_CLIENT_API_KEY** in `App.tsx` with your Portal Client API Key (screenshot below).
+5. Run the app and it should work without any issues.
 
-# OR using Yarn
-yarn start
-```
+Note: It would be better to use the Simulator over using Real Device, don't test on Real iPhone device while the Xcode debugger is attached.
 
-## Step 2: Start your Application
+![Portal Settings](demos/portal-settings-page.png)
+![Portal Constants File](demos/portal-constants-file.png)
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+## Understanding the Example App
 
-### For Android
+This app is made up of two main screens: Home and Wallet. The Home screen is where you can generate a new wallet or recover a backed up wallet, and the Wallet screen is where you can view your wallet details and perform transactions and backup.
+Here is the project important files:
 
-```bash
-# using npm
-npm run android
+1. `lib/portal.ts`: This is where all the **Portal** logic is implemented. For more info on how to use the React Native Portal SDK please refer to [this doc](https://docs.portalhq.io/guides/react-native).
+2. `components/home/index.tsx`: The parent component for the Home screen.
+3. `components/home/Wallet.tsx`: The parent component for the Wallet screen.
 
-# OR using Yarn
-yarn android
-```
+## Faucets for App Testing
 
-### For iOS
+To fully test this app (like for example to transfer funds) you will need to load your wallet with TestNet Solana and PyUSD tokens. Below are some faucets that you can use.
 
-```bash
-# using npm
-npm run ios
+- [SOL Faucet](https://faucet.solana.com/)
+- [PYUSD Faucet](https://faucet.paxos.com/)
 
-# OR using Yarn
-yarn ios
-```
+## Portal & PYUSD Documentation
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+### Portal SDK Reference
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+Portal's SDKs have several pieces of core functionality.
 
-## Step 3: Modifying your App
+- [Generating a Wallet](https://docs.portalhq.io/guides/react-native/create-a-wallet): This function creates MPC key shares on your local device and the Portal servers. These key shares support all EVM chains and Solana.
+- [Signing a Transaction](https://docs.portalhq.io/guides/react-native/sign-a-transaction): This function signs a provided transaction, and can broadcast that transaction to a chain when an RPC gateway URL is provided.
+- [Signature Hooks](https://docs.portalhq.io/guides/react-native/add-custom-signature-hooks): By default this repo will submit a transaction without prompting a user, but you can use signature hooks to build a prompt for users before submitting a transaction for signing.
 
-Now that you have successfully run the app, let's modify it.
+### Portal APIs
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+Portal supplies several APIs for simplifying your development.
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+- [Get Assets](https://docs.portalhq.io/reference/client-api/v3-endpoints#get-assets-by-chain): This endpoint returns a list of fungible asset (native, ERC-20, and SPL tokens) associated with your client for a given chain.
+- [Get NFTs](https://docs.portalhq.io/reference/client-api/v3-endpoints#get-nft-assets-by-chain): This endpoint returns a list of the NFTs associated with your client for a given chain.
+- [Get Transactions](https://docs.portalhq.io/reference/client-api/v3-endpoints#get-transactions-by-chain): This endpoint returns a list of the historic transactions associated with your client for a given chain.
+- [Build a Transaction - Send Asset](https://docs.portalhq.io/reference/client-api/v3-endpoints#build-a-send-asset-transaction): This endpoint builds a formatted transaction to send a fungible asset (native, ERC-20, and SPL tokens) for a given chain.
+- [Evaluate a Transaction](https://docs.portalhq.io/reference/client-api/v3-endpoints#evaluate-a-transaction): This endpoint can simulate a transaction and/or scan a transaction for security concerns.
 
-## Congratulations! :tada:
+### PYUSD Documentation
 
-You've successfully run and modified your React Native App. :partying_face:
+- [PYUSD on Solana](https://solana.com/news/pyusd-paypal-solana-developer): An overview of PYUSD on Solana.
+- [PYUSD Quick Start Guide](https://developer.paypal.com/community/blog/pyusd-quick-start-guide/): A quick overview of PYUSD and information behind it.
+- [PYUSD Solana Testnet Faucet](https://faucet.paxos.com/): Use this faucet to get testnet PYUSD on Solana.
+- [What is PayPal USD](https://www.paypal.com/us/cshelp/article/what-is-paypal-usd-pyusd-help1005): Information about how PYUSD works.
+- [PYUSD Solana (SPL) Mainnet Address](https://explorer.solana.com/address/2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo): `2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo`
+- [PYUSD Solana (SPL) Devnet Address](https://explorer.solana.com/address/CXk2AMBfi3TwaEL2468s6zP8xq9NxTXjp9gjMgzeUynM?cluster=devnet): `CXk2AMBfi3TwaEL2468s6zP8xq9NxTXjp9gjMgzeUynM`
 
-### Now what?
+### Solana Documentation
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+- [Intro to Solana Development](https://solana.com/developers/guides/getstarted/hello-world-in-your-browser): An introduction to development on Solana.
+- [Solana SPL Token Docs](https://spl.solana.com/token): Documentation on SPL tokens.
 
-# Troubleshooting
+### Faucets
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+- [SOL Faucet](https://faucet.solana.com/)
+- [PYUSD Faucet](https://faucet.paxos.com/)
 
-# Learn More
+### Other Helpful Resources
 
-To learn more about React Native, take a look at the following resources:
+- [What is Portal MPC?](https://docs.portalhq.io/resources/portals-mpc-architecture)
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+## Help
+
+Need help or want to request a feature? Reach out to the PayPal & Portal teams on the [official hackathon Slack channel](https://portalcommunity.slack.com/archives/C07EZFF9N78).

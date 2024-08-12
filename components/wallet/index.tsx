@@ -1,9 +1,11 @@
 import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
-import { Button, Text, TextInput, View } from 'react-native'
+import { Text, TextInput, View } from 'react-native'
 import { styles } from '../../style/stylesheet'
 import Chain from '../../lib/chains'
 import { getAssetBalances, transferToken } from '../../lib/portal'
 import Screen from '../../lib/screens'
+import PortalButton from '../shared/button'
+import BackupWallet from './backup-wallet'
 
 interface WalletComponentProps {
   address: string
@@ -96,7 +98,12 @@ const WalletComponent: FC<WalletComponentProps> = ({
             style={styles.textInput}
           />
         </View>
-        <Button title="Send PyUSD" onPress={sendPyusd} />
+
+        <PortalButton
+          title="Send PyUSD"
+          onPress={sendPyusd}
+          style={{ marginTop: 10 }}
+        />
       </View>
 
       {typeof transactionHash !== 'undefined' && transactionHash.length > 0 && (
@@ -105,6 +112,8 @@ const WalletComponent: FC<WalletComponentProps> = ({
           <Text>{transactionHash}</Text>
         </View>
       )}
+
+      <BackupWallet />
     </View>
   )
 }

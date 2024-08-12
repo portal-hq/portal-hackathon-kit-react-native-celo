@@ -1,9 +1,12 @@
-import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
-import { Button, View } from 'react-native'
-import Portal, { usePortal } from '@portal-hq/core'
-import { styles } from '../../style/stylesheet'
+import React, { Dispatch, FC, SetStateAction } from 'react'
+import { View } from 'react-native'
+
 import Screen from '../../lib/screens'
-import { doesWalletExist } from '../../lib/portal'
+
+import { styles } from '../../style/stylesheet'
+
+import CreateWalletComponent from './create-wallet'
+import RecoverWalletComponent from './recover-wallet'
 
 interface HomeComponentProps {
   setAddress: Dispatch<SetStateAction<string>>
@@ -11,36 +14,10 @@ interface HomeComponentProps {
 }
 
 const HomeComponent: FC<HomeComponentProps> = ({ setAddress, setScreen }) => {
-  const portal = usePortal()
-
-  const createWallet = async () => {
-    if (portal) {
-      const addresses = await portal.createWallet()
-
-      if (addresses.solana) {
-        setAddress(addresses.solana)
-        setScreen(Screen.Wallet)
-      }
-    }
-  }
-
-  useEffect(() => {
-    if (portal) {
-      ;(async () => {
-        const walletExists = await doesWalletExist()
-
-        if (walletExists) {
-          setScreen(Screen.Wallet)
-        }
-      })()
-    }
-  }, [portal])
-
   return (
     <View style={styles.container}>
-      <View style={styles.container}>
-        <Button title="Create Wallet" onPress={createWallet} />
-      </View>
+      <CreateWalletComponent setAddress={setAddress} setScreen={setScreen} />
+      <RecoverWalletComponent setAddress={setAddress} setScreen={setScreen} />
     </View>
   )
 }
