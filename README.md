@@ -1,6 +1,8 @@
-# Portal Hackathon React Native Helper Repository
+![Portal Logo](https://cdn.prod.website-files.com/66a9400bd5456b4248f11c92/66a940c97f391719bd5ba2b9_Portal%20logo%201.png)
 
-This repository shows you how you can easily integrate Solana blockchain into your iOS app using the [Portal iOS SDK](https://docs.portalhq.io/guides/ios). It covers the following features.
+# Portal Hackathon Kit - React Native
+
+This repository shows you how you can easily integrate Solana blockchain into your React Native app using the [Portal iOS SDK](https://docs.portalhq.io/guides/ios). It covers the following features.
 
 1. Generate a Solana Wallet
 2. Fetch and display Solana and PyUSD balances.
@@ -38,7 +40,7 @@ To fully test this app (like for example to transfer funds) you will need to loa
 - [SOL Faucet](https://faucet.solana.com/)
 - [PYUSD Faucet](https://faucet.paxos.com/)
 
-## Portal & PYUSD Documentation
+## Portal Documentation
 
 ### Portal SDK Reference
 
@@ -83,4 +85,4 @@ Portal supplies several APIs for simplifying your development.
 
 ## Help
 
-Need help or want to request a feature? Reach out to the PayPal & Portal teams on the [official hackathon Slack channel](https://portalcommunity.slack.com/archives/C07EZFF9N78).
+Need help or want to request a feature? Reach out to us on the [official Portal Community Slack](https://portalcommunity.slack.com/archives/C07EZFF9N78).
