@@ -10,8 +10,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "@portal-hq/core": "^4.0.0",
-    "@portal-hq/keychain": "^4.0.0",
+    "@portal-hq/core": "^4.0.3",
+    "@portal-hq/keychain": "^4.0.3",
     "react": "18.2.0",
     "react-native": "0.74.5",
     "react-native-keychain": "^8.2.0",
@@ -37,5 +37,9 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "resolutions": {
+    "next": "^14.2.21"
   }
 }
+
