@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StatusBar, View } from 'react-native'
+import { StatusBar, View, KeyboardAvoidingView, Platform } from 'react-native'
 import {
   SafeAreaInsetsContext,
   SafeAreaProvider,
@@ -15,7 +15,7 @@ import Wallet from './screens/Wallet'
 
 function App(): JSX.Element {
   const [address, setAddress] = useState<string>('')
-  const [chain, setChain] = useState<Chain>(Chain.Devnet)
+  const [chain, setChain] = useState<Chain>(Chain.Testnet)
   const [portal, setPortal] = useState<Portal | null>(null)
   const [screen, setScreen] = useState<Screen>(Screen.Home)
 
@@ -27,9 +27,9 @@ function App(): JSX.Element {
       ;(async () => {
         const addresses = await portal.addresses
 
-        if (addresses?.solana) {
-          console.log(`Solana address: ${addresses.solana}`)
-          setAddress(addresses.solana)
+        if (addresses?.eip155) {
+          console.log(`Ethereum address: ${addresses.eip155}`)
+          setAddress(addresses.eip155)
         }
       })()
     }
@@ -40,7 +40,8 @@ function App(): JSX.Element {
       <PortalContextProvider value={portal as Portal}>
         <SafeAreaInsetsContext.Consumer>
           {(insets) => (
-            <View
+            <KeyboardAvoidingView
+              behavior={Platform.OS === 'ios' ? 'padding' : undefined}
               style={[
                 styles.container,
                 styles.safeArea,
@@ -65,7 +66,7 @@ function App(): JSX.Element {
                   />
                 )}
               </View>
-            </View>
+            </KeyboardAvoidingView>
           )}
         </SafeAreaInsetsContext.Consumer>
       </PortalContextProvider>

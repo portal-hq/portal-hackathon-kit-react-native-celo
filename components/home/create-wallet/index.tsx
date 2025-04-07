@@ -23,8 +23,8 @@ const CreateWalletComponent: FC<CreateWalletComponentProps> = ({
     if (portal) {
       const addresses = await portal.createWallet()
 
-      if (addresses.solana) {
-        setAddress(addresses.solana)
+      if (addresses.eip155) {
+        setAddress(addresses.eip155)
         setScreen(Screen.Wallet)
       }
     }

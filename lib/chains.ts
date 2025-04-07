@@ -1,6 +1,6 @@
 enum Chain {
-  Mainnet = 'solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp',
-  Devnet = 'solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1',
+  Mainnet = 'eip155:42220', // Celo Mainnet
+  Testnet = 'eip155:44787', // Celo Alfajores Testnet
 }
 
 export default Chain

@@ -15,7 +15,6 @@ const Wallet: FC<WalletProps> = ({ address, chain, setScreen }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.screenTitle}>Wallet</Text>
-
       <WalletComponent address={address} chain={chain} setScreen={setScreen} />
     </View>
   )

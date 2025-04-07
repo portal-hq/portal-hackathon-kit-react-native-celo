@@ -3,6 +3,7 @@ import { StyleProp, Text, TouchableOpacity, ViewStyle } from 'react-native'
 
 interface ButtonProps {
   color?: string
+  disabled?: boolean
   onPress: () => void
   style?: StyleProp<ViewStyle>
   textColor?: string
@@ -11,6 +12,7 @@ interface ButtonProps {
 
 const PortalButton: FC<ButtonProps> = ({
   color = 'black',
+  disabled = false,
   onPress,
   style = {},
   textColor = 'white',
@@ -19,13 +21,15 @@ const PortalButton: FC<ButtonProps> = ({
   return (
     <TouchableOpacity
       onPress={onPress}
+      disabled={disabled}
       style={[
         {
           alignItems: 'center',
-          backgroundColor: color,
+          backgroundColor: disabled ? 'gray' : color,
           borderRadius: 5,
           paddingHorizontal: 10,
           paddingVertical: 15,
+          opacity: disabled ? 0.7 : 1,
         },
         style,
       ]}

@@ -44,8 +44,8 @@ const RecoverWalletComponent: FC<RecoverWalletComponentProps> = ({
       },
     )
 
-    if (addresses?.solana) {
-      setAddress(addresses.solana)
+    if (addresses?.eip155) {
+      setAddress(addresses.eip155)
       setScreen(Screen.Wallet)
       setRecoveryDone(true)
       setIsRecovering(false)
@@ -57,7 +57,7 @@ const RecoverWalletComponent: FC<RecoverWalletComponentProps> = ({
   }
 
   useEffect(() => {
-    console.log(`Modal is visiable: ${isModalVisible}`)
+    console.log(`Modal is visible: ${isModalVisible}`)
   }, [isModalVisible])
 
   return (

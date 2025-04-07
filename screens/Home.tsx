@@ -1,6 +1,5 @@
 import React, { Dispatch, FC, SetStateAction } from 'react'
-import { Text, View } from 'react-native'
-import Portal from '@portal-hq/core'
+import { Text, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 import { styles } from '../style/stylesheet'
 import HomeComponent from '../components/home'
 import Screen from '../lib/screens'
@@ -12,11 +11,20 @@ interface HomeProps {
 
 const Home: FC<HomeProps> = ({ setAddress, setScreen }) => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.screenTitle}>Home</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{ paddingBottom: 40 }}
+        showsVerticalScrollIndicator={true}
+      >
+        <Text style={styles.screenTitle}>Home</Text>
 
-      <HomeComponent setAddress={setAddress} setScreen={setScreen} />
-    </View>
+        <HomeComponent setAddress={setAddress} setScreen={setScreen} />
+      </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 

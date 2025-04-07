@@ -4,6 +4,7 @@ import PortalButton from '../../shared/button'
 import PinModal from '../../shared/pin-modal'
 import { styles } from '../../../style/stylesheet'
 import { BackupMethods, usePortal } from '@portal-hq/core'
+import React from 'react'
 
 const BackupWallet: FC = () => {
   const portal = usePortal()
